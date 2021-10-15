@@ -1,0 +1,53 @@
+# -*- coding: utf-8 -*-
+import numpy as np
+import math
+
+x = 1
+y = 1
+z = 1
+xl = [x]
+yl = [y]
+zl = [z]
+errorL = []
+tolerance = 10**(-6)
+error = 1000000
+h = 10**-12   
+
+def f1(x, y, z):
+    return x**2 + 2*y**2 - 3*z
+    
+
+def f2(x, y, z):
+    return -x**2 + 2*y**3 - math.exp(-z) + 1
+
+def f3(x, y, z):
+    return x + 2*y**2 + 3*z
+
+def fxprime(f, x, y, z):
+    return (f(x+h, y, z) - f1(x-h, y, z))/2*h
+
+def fyprime(f, x, y, z):
+    return (f(x, y+h, z) - f1(x, y+h, z))/2*h
+
+def fzprime(f, x, y, z):
+    return (f(x, y, z+h) - f1(x, y, z-h))/2*h
+
+def Jacobi(funcs, x, y, z):
+    J = np.zeros((len(funcs), len(funcs)))
+    count = 0
+    for f in funcs:
+        J[count][0] = fxprime(f, x, y, z) 
+        J[count][1] = fyprime(f, x, y, z) 
+        J[count][2] = fzprime(f, x, y, z) 
+        count += 1
+    return J
+
+def norm2(A):
+    two = 0
+    for row in A:
+        two += (row[-1] - row[-2])**2
+    return math.sqrt(two)
+
+while error > tolerance:
+    J =  Jacobi([f1, f2, f3], x, y, z)
+
