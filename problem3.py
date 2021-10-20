@@ -17,6 +17,7 @@ vk = np.array([x0, y0, z0])
 A = []
 b = []
 error = 999999999
+eps =  10e-9
 error_array = []
 count = 0
 count_array = []
@@ -42,7 +43,7 @@ def fprime(f, x, y, z):
     return dx, dy, dz
 
 
-while error > h:
+while error > eps:
     count_array.append(count)
     A.append(fprime(f1, x0, y0, z0))
     A.append(fprime(f2, x0, y0, z0))
